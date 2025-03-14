@@ -85,7 +85,7 @@ python -m monitor.main --script /path/to/your_ml_script.py --logfile /path/to/tr
 
 This tool is a basic, rule-based monitoring solution for ML runtimes and is intended for demonstration and educational purposes only. It should not replace a comprehensive security audit or intrusion detection system. Please customize the risk rules as needed for your environment and adhere to best security practices.
 
-**IMPORTANT** It is still under contrustion, so there will be some problems!!!
+**[IMPORTANT]** It is still under contrustion
 
 
 
