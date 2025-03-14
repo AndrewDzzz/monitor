@@ -114,7 +114,7 @@ None
 
 This tool is a basic, rule-based monitoring solution for ML runtimes and is intended for demonstration and educational purposes only. It should not replace a comprehensive security audit or intrusion detection system. Please customize the risk rules as needed for your environment and adhere to best security practices.
 
-**[IMPORTANT]** It is still under contrustion
+**[IMPORTANT]** It is still under contrustion！！！
 
 **[IMPORTANT]** Remember to run the code in sandbox！！！
 
