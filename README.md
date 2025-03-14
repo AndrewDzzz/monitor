@@ -85,13 +85,12 @@ python -m monitor.main --script /path/to/your_ml_script.py --logfile /path/to/tr
 
 When running the model mkiani/gpt2-eval in hugging face which contains the code snippet:
 
-python
 ```bash
 __import__("os").system("ls")
 ```
 
 /path/to/your_ml_script.py often contains the code for u to run the model:
-python
+
 ```bash
 import torch
 torch.load("/path/your_ml_path")
