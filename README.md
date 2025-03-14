@@ -94,10 +94,10 @@ __import__("os").system("ls")
 ```bash
 Python audit hook registered.
 Monitoring: /kaggle/working/example.py, log file: /kaggle/working/trace.log
-[AUDIT CRITICAL] Subprocess execution detected => Event: subprocess.Popen, Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/kaggle/working/trace.log', 'python', '/kaggle/working/example.py'], None, None)
-[AUDIT CRITICAL] Unsafe global usage detected: Module 'subprocess' in event 'subprocess.Popen', Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/kaggle/working/trace.log', 'python', '/kaggle/working/example.py'], None, None)
+[AUDIT CRITICAL] Subprocess execution detected => Event: subprocess.Popen, Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/path/trace.log', 'python', '/path/example.py'], None, None)
+[AUDIT CRITICAL] Unsafe global usage detected: Module 'subprocess' in event 'subprocess.Popen', Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/path/trace.log', 'python', '/kaggle/working/example.py'], None, None)
 strace: invalid system call 'trace:file'
-[AUDIT CRITICAL] Unsafe global usage detected: Module 'os' in event 'os.scandir', Args: ('/kaggle/working',)
+[AUDIT CRITICAL] Unsafe global usage detected: Module 'os' in event 'os.scandir', Args: ('/path',)
 
 === 🚨 High Risk ===
 ⚠️ Creating executable file in temporary directory: openat(AT_FDCWD, "/tmp/tmpur81jizd/_remote_module_non_scriptable.py", O_WRONLY|O_CREAT|O_TRUNC|O_CLOEXEC, 0666) = 5
