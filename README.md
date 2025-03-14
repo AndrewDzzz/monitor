@@ -122,9 +122,10 @@ This tool is a basic, rule-based monitoring solution for ML runtimes and is inte
 
 **[IMPORTANT]** This project is fully contructed by gpt so I need time to verify all of the function. If you are interested in it, I will be happy to hear feedback from u!!!
 
-**[IMPORTANT]** It is still under contrustion！！！
+**[IMPORTANT]** It is still under contrustion！！！I will try to connect the log with gpt to give more detailed answer！！！
 
 **[IMPORTANT]** Remember to run the code in sandbox！！！
+
 
 
 
