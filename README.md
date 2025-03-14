@@ -81,6 +81,35 @@ To monitor internal Python operations (e.g., dynamic code execution) with the au
 python -m monitor.main --script /path/to/your_ml_script.py --logfile /path/to/trace.log --audit
 ```
 
+### Example
+
+When running the model mkiani/gpt2-eval in hugging face which contains the code snippet:
+
+python
+```bash
+__import__("os").system("ls")
+```
+
+—the tool produces the following output:
+```bash
+Python audit hook registered.
+Monitoring: /kaggle/working/example.py, log file: /kaggle/working/trace.log
+[AUDIT CRITICAL] Subprocess execution detected => Event: subprocess.Popen, Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/kaggle/working/trace.log', 'python', '/kaggle/working/example.py'], None, None)
+[AUDIT CRITICAL] Unsafe global usage detected: Module 'subprocess' in event 'subprocess.Popen', Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/kaggle/working/trace.log', 'python', '/kaggle/working/example.py'], None, None)
+strace: invalid system call 'trace:file'
+[AUDIT CRITICAL] Unsafe global usage detected: Module 'os' in event 'os.scandir', Args: ('/kaggle/working',)
+
+=== 🚨 High Risk ===
+⚠️ Creating executable file in temporary directory: openat(AT_FDCWD, "/tmp/tmpur81jizd/_remote_module_non_scriptable.py", O_WRONLY|O_CREAT|O_TRUNC|O_CLOEXEC, 0666) = 5
+❌ os.system() call detected: execve("/bin/sh", ["sh", "-c", "ls"], 0x5bcb9e830600 /* 98 vars */) = 0
+
+=== ⚠️ Medium Risk ===
+None
+
+=== ℹ️ Low Risk ===
+None
+```
+
 ## Disclaimer
 
 This tool is a basic, rule-based monitoring solution for ML runtimes and is intended for demonstration and educational purposes only. It should not replace a comprehensive security audit or intrusion detection system. Please customize the risk rules as needed for your environment and adhere to best security practices.
