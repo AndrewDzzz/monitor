@@ -101,7 +101,7 @@ torch.load("/path/your_ml_path")
 Python audit hook registered.
 Monitoring: example.py, log file: trace.log
 [AUDIT CRITICAL] Subprocess execution detected => Event: subprocess.Popen, Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/path/trace.log', 'python', '/path/example.py'], None, None)
-[AUDIT CRITICAL] Unsafe global usage detected: Module 'subprocess' in event 'subprocess.Popen', Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/path/trace.log', 'python', 'example.py'], None, None)
+[AUDIT CRITICAL] Unsafe global usage detected: Module 'subprocess' in event 'subprocess.Popen', Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/path/trace.log', 'python', '/path/example.py'], None, None)
 strace: invalid system call 'trace:file'
 [AUDIT CRITICAL] Unsafe global usage detected: Module 'os' in event 'os.scandir', Args: ('/path',)
 
