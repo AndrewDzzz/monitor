@@ -28,7 +28,7 @@ Use two citation targets:
   title = {ModelFP: Dockerized Evidence-Backed Model Repository Forensics},
   year = {2026},
   month = may,
-  url = {https://github.com/AndrewDzzz/monitor},
+  url = {https://github.com/AndrewDzzz/ModelFP},
   note = {ModelFP skill-suite release on 2026-05-18}
 }
 ```

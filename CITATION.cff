@@ -5,8 +5,8 @@ type: software
 authors:
   - name: "AndrewDzzz"
 date-released: 2026-05-18
-repository-code: "https://github.com/AndrewDzzz/monitor"
-url: "https://github.com/AndrewDzzz/monitor"
+repository-code: "https://github.com/AndrewDzzz/ModelFP"
+url: "https://github.com/AndrewDzzz/ModelFP"
 license: MIT
 abstract: "ModelFP packages the March 2025 monitor prototype into a Docker-first, repo-level model forensic audit workflow with static analysis, optional dynamic tracing, evidence graphs, harm certificates, and agent-assisted review."
 preferred-citation:
@@ -16,8 +16,8 @@ preferred-citation:
     - name: "AndrewDzzz"
   date-released: 2026-05-18
   year: 2026
-  repository-code: "https://github.com/AndrewDzzz/monitor"
-  url: "https://github.com/AndrewDzzz/monitor"
+  repository-code: "https://github.com/AndrewDzzz/ModelFP"
+  url: "https://github.com/AndrewDzzz/ModelFP"
 references:
   - type: software
     title: "monitor: strace and Python audit hook monitoring for ML model execution"
