@@ -1,24 +1,24 @@
 # ModelFP Skill Package
 
-这个包把 ModelFP 的设计落成一个可复用的 skill 草案。
+This package turns ModelFP into a reusable Codex skill for Dockerized model repository forensics.
 
-包含：
+It includes:
 
-- `SKILL.md`：Codex skill 入口说明。
-- `agents/openai.yaml`：UI 元数据。
-- `schemas/evidence.schema.json`：证据节点 schema。
-- `schemas/rule.schema.json`：规则 DSL schema。
-- `schemas/harm_certificate.schema.json`：harm certificate schema。
-- `examples/model_fp_policy.yaml`：示例策略和规则。
-- `examples/harm_certificate.example.json`：示例证书。
-- `examples/model_fp_report.example.json`：示例最终报告。
-- `prompts/gpt_trace_auditor_prompt.md`：GPT 证据审核 prompt。
-- `prompts/gpt_rule_generator_prompt.md`：GPT 候选规则生成 prompt。
-- `docs/formalization_notes.md`：形式化验证笔记。
-- `docs/literature_grounding.md`：论文方法到证据链节点的映射。
+- `SKILL.md`: Codex skill entry point.
+- `agents/openai.yaml`: UI metadata.
+- `schemas/evidence.schema.json`: evidence node schema.
+- `schemas/rule.schema.json`: rule DSL schema.
+- `schemas/harm_certificate.schema.json`: harm certificate schema.
+- `examples/model_fp_policy.yaml`: sample policy and rules.
+- `examples/harm_certificate.example.json`: sample certificate.
+- `examples/model_fp_report.example.json`: sample final report.
+- `prompts/gpt_trace_auditor_prompt.md`: GPT evidence-review prompt.
+- `prompts/gpt_rule_generator_prompt.md`: GPT candidate-rule prompt.
+- `docs/formalization_notes.md`: formalization notes.
+- `docs/literature_grounding.md`: mapping from published methods to evidence-chain nodes.
 
-审计主入口是 Docker 脚本。`code/modelfp_docker_runner.py` 只应在容器内运行；默认会拒绝宿主机执行，避免把宿主机路径、凭证或环境混进证据链。
-远程模型的下载、Hub 元数据采集、静态审计和运行时审计都通过 Docker 完成；每次完整审计都会落在独立 dataset 文件夹下。
+The primary audit entry points are the Docker scripts. `code/modelfp_docker_runner.py` should run inside the container; by default it refuses host execution to avoid mixing host paths, credentials, or environment state into the evidence chain.
+Remote model download, Hub metadata collection, static audit, and runtime audit are all performed through Docker. Each full audit is written to an isolated dataset folder.
 
 ## Docker sandbox add-on
 
