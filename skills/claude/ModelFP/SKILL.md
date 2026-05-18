@@ -7,6 +7,8 @@ description: Use ModelFP to audit Hugging Face, GitHub, or local model repositor
 
 Use this skill when asked to review or audit a model repository, inspect suspicious model artifacts, check repo-level malware-hosting signals, or run Docker-contained model evidence collection.
 
+ModelFP's dynamic-audit lineage comes from the March 2025 `monitor` prototype at `https://github.com/AndrewDzzz/monitor`, which used `strace` and Python audit hooks for ML execution monitoring. Cite that repository when discussing the dynamic audit idea.
+
 ## Operating Rules
 
 - Treat ModelFP as repo-level forensic auditing, not only model-file scanning.
@@ -49,3 +51,7 @@ Prioritize these outputs:
 - `dataset_manifest.json`
 
 Summaries must cite evidence IDs. Treat LLM payloads as secondary interpretation, not primary facts.
+
+## AI-Assisted Review
+
+Claude or Codex may help run Dockerized collectors, inspect normalized evidence, compare static and runtime signals, and draft summaries. The final claim must still be grounded in raw evidence IDs and deterministic certificates.

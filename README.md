@@ -10,6 +10,8 @@ The project is packaged for local CLI use and as agent skills:
 
 ModelFP audits a bounded context: repository, revision, files, config, metadata, container, command, inputs, and trace coverage. It does not prove universal model safety.
 
+The dynamic-audit lineage comes from the March 2025 `monitor` prototype in this repository, which used `strace` and Python audit hooks to observe ML model execution. ModelFP turns that idea into a Docker-first, repo-level workflow and adds static fusion plus AI-assisted evidence review.
+
 ## Quick Start
 
 Build the Docker images:
@@ -58,6 +60,15 @@ Install a self-contained Claude skill folder into a chosen destination:
 
 The Codex frontmatter name remains `modelfp` because Codex skill names are lowercase identifiers. The public project, UI display name, and Claude skill are named `ModelFP`.
 
+## Docker Companion
+
+ModelFP ships with Docker as the default execution boundary:
+
+- `modelfp:latest` for static analysis, metadata collection, evidence normalization, rule checking, and pickle detonation helpers;
+- `modelfp:ml` for controlled local model execution with CPU ML dependencies.
+
+Remote fetch and metadata stages may use network access. Static analysis, normal runtime checks, and pickle detonation run offline with read-only target mounts. See `docs/DOCKER_WORKFLOW.md`.
+
 ## What It Checks
 
 Static modules run inside Docker and include:
@@ -99,3 +110,7 @@ The published repository excludes local audit outputs, model snapshots, sandbox 
 ## Method
 
 See `docs/METHODOLOGY.md` for the audit route and evidence-chain design.
+
+## Citation
+
+If you use the dynamic audit idea or ModelFP workflow, cite this repository. See `CITATION.cff` and `docs/RELATED_WORK.md`.

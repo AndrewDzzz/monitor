@@ -2,6 +2,8 @@
 
 ModelFP is repo-level first. It treats a model repository as a supply-chain object, not just as one serialized model file.
 
+The dynamic route descends from the March 2025 `monitor` prototype in this repository. That prototype used `strace` plus Python audit hooks to observe ML model execution at runtime. ModelFP keeps that core idea but packages it as a Docker-first, repo-level audit workflow with static fusion, evidence graphs, and AI-assisted review.
+
 ## Audit Boundary
 
 Each audit records:
@@ -44,6 +46,18 @@ Runtime analysis is optional and only runs in Docker.
 
 For pickle detonation, each `.pickle` or `.pkl` artifact runs in its own fresh container with network disabled, tmpfs temporary storage, resource limits, and read-only repo mounts.
 
+## AI-Assisted Review
+
+The 2025 prototype assumed the auditor would manually inspect logs. The current workflow lets an AI coding agent help with the repetitive audit work:
+
+- run Dockerized collectors and preserve manifests;
+- check that claims cite evidence IDs;
+- compare static and runtime signals;
+- summarize risk without treating LLM output as primary evidence;
+- propose extra rules or follow-up experiments for human approval.
+
+The evidence graph and deterministic certificates remain the source of truth.
+
 ## Evidence Chain
 
 ModelFP separates evidence into layers:
@@ -61,3 +75,9 @@ Static evidence can identify repo-level risk without executing code. Dynamic evi
 ## Docker Model
 
 The host builds Docker images, mounts inputs, and reads outputs. All audit collection and analysis should run inside containers. Network is allowed only for download or metadata stages, then disabled for offline static and runtime stages.
+
+See `DOCKER_WORKFLOW.md` for the image and stage layout.
+
+## Citation Position
+
+When describing the dynamic audit idea, cite the March 2025 `monitor` prototype from this repository. When comparing to later model-specific dynamic analysis, also cite DynaHug, "Malicious ML Model Detection by Learning Dynamic Behaviors" (arXiv:2604.19438, submitted 2026-04-21). For broader supply-chain dynamic analysis, DySec (arXiv:2503.00324, submitted 2025-03-01) is relevant context.

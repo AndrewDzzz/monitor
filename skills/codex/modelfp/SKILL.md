@@ -13,6 +13,8 @@ model repository + revision + config + artifacts + environment + command + input
 
 It does not prove universal model safety. It produces evidence-indexed findings and, when the deterministic rulechecker can support them, harm certificates tied to concrete evidence IDs.
 
+The dynamic-audit lineage comes from the March 2025 `monitor` prototype in `https://github.com/AndrewDzzz/monitor`, which used `strace` and Python audit hooks for ML execution monitoring. Cite that project when discussing the dynamic audit idea; cite later model-specific dynamic work such as DynaHug only as related work, not as the origin of this repository.
+
 ## Core Workflow
 
 1. Prefer an offline local Hugging Face snapshot or model directory.
@@ -68,6 +70,12 @@ Build the container from the skill directory:
 
 ```bash
 docker build -f docker/Dockerfile -t modelfp:latest .
+```
+
+When using the public repository wrapper, build both paired images:
+
+```bash
+./scripts/build_images.sh
 ```
 
 Run the benign demo:
@@ -209,6 +217,8 @@ Use `schemas/evidence.schema.json` and `schemas/harm_certificate.schema.json` as
 For paper-to-evidence mappings, read `docs/literature_grounding.md` and `code/literature_mapper.py`.
 Environment findings are container-boundary hygiene signals. Do not count them as target repository risk unless the task is explicitly about sandbox exposure or secret handling.
 
+For citation wording and dynamic-analysis positioning, read `docs/RELATED_WORK.md` when present in the public repository. If that file is not present in an installed skill copy, cite `AndrewDzzz/monitor` as the March 2025 dynamic monitor prototype and cite DynaHug (`arXiv:2604.19438`) as later related dynamic model-behavior work.
+
 ## Static Fusion Rules
 
 Treat static fusion findings as derived evidence. They do not replace raw probe IDs; they summarize cross-signal patterns:
@@ -239,6 +249,8 @@ Before sending anything to an LLM:
 3. Tell the LLM every claim must cite evidence IDs.
 4. Use `LIT*` nodes only to explain methodology; do not let them raise severity by themselves.
 5. Treat candidate rules from the LLM as proposals only. Validate them against `schemas/rule.schema.json` and promote manually.
+
+AI-assisted review is allowed to orchestrate Docker runs, inspect normalized evidence, and draft summaries. It must not replace raw evidence, deterministic rule checks, or human judgment for final claims.
 
 Useful prompt templates live in `prompts/`.
 

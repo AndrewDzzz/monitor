@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use ModelFP or its dynamic audit workflow, please cite this repository."
+title: "ModelFP: Dockerized Evidence-Backed Model Repository Forensics"
+type: software
+authors:
+  - name: "AndrewDzzz"
+date-released: 2025-03-15
+repository-code: "https://github.com/AndrewDzzz/monitor"
+url: "https://github.com/AndrewDzzz/monitor"
+license: MIT
+abstract: "ModelFP packages the March 2025 monitor prototype into a Docker-first, repo-level model forensic audit workflow with static analysis, optional dynamic tracing, evidence graphs, harm certificates, and agent-assisted review."
+preferred-citation:
+  type: software
+  title: "monitor: strace and Python audit hook monitoring for ML model execution"
+  authors:
+    - name: "AndrewDzzz"
+  date-released: 2025-03-15
+  year: 2025
+  repository-code: "https://github.com/AndrewDzzz/monitor"

@@ -6,6 +6,8 @@ ModelFP uses literature-grounding nodes (`LIT*`) to explain why a finding belong
 
 | ID | Source | ModelFP use |
 |---|---|---|
+| `andrewdzzz_2025_monitor` | AndrewDzzz, `monitor`, GitHub repository, initial public commit 2025-03-15 | Ground the repository's original dynamic audit idea: `strace` plus Python audit hooks for ML model execution monitoring. |
+| `mehedi_2025_dysec` | Mehedi et al., "DySec", arXiv:2503.00324 | Ground broader supply-chain dynamic analysis using controlled runtime behavior monitoring. |
 | `zhao_2024_malhug` | Zhao et al., "Models Are Codes", arXiv:2409.09368 | Ground custom-code loading, model deserialization, taint-style chains, and heuristic pattern matching. |
 | `casey_2024_hf_exploit` | Casey et al., "A Large-Scale Exploit Instrumentation Study", arXiv:2410.04490 | Ground unsafe serialization and Hugging Face exploit instrumentation. |
 | `siddiq_2026_rce` | Siddiq et al., "An Empirical Study on Remote Code Execution in ML Model Hosting Ecosystems", arXiv:2601.14163 | Ground `trust_remote_code` / custom loader RCE risk and static-analysis/YARA-style taxonomy. |

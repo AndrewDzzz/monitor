@@ -16,6 +16,18 @@ from typing import Any, Dict, Iterable, List, Mapping, Sequence
 Evidence = Dict[str, Any]
 
 BIBLIOGRAPHY: Dict[str, Dict[str, Any]] = {
+    "andrewdzzz_2025_monitor": {
+        "title": "monitor: strace and Python audit hook monitoring for ML model execution",
+        "year": 2025,
+        "url": "https://github.com/AndrewDzzz/monitor",
+        "method": "March 2025 repository prototype that used OS-level strace and Python audit hooks to observe sensitive behavior during ML model execution.",
+    },
+    "mehedi_2025_dysec": {
+        "title": "DySec: A Machine Learning-based Dynamic Analysis for Detecting Malicious Packages in PyPI Ecosystem",
+        "year": 2025,
+        "url": "https://arxiv.org/abs/2503.00324",
+        "method": "Controlled dynamic supply-chain analysis using kernel/user-level probes and real-time behavior features.",
+    },
     "zhao_2024_malhug": {
         "title": "Models Are Codes: Towards Measuring Malicious Code Poisoning Attacks on Pre-trained Model Hubs",
         "year": 2024,
@@ -253,9 +265,9 @@ def build_literature_nodes(graph: Mapping[str, Any], cert_bundle: Mapping[str, A
         out.append(_node(
             idx,
             "dynamic_behavior_methodology_match",
-            "Runtime evidence follows the dynamic-analysis direction used to catch behaviors that static scanners can miss.",
+            "Runtime evidence follows the repository's March 2025 dynamic-monitoring idea and later dynamic-analysis work used to catch behaviors that static scanners can miss.",
             _ids(runtime_risky[:50]),
-            ["nambiar_2026_dynahug", "zhao_2024_malhug"],
+            ["andrewdzzz_2025_monitor", "nambiar_2026_dynahug", "mehedi_2025_dysec", "zhao_2024_malhug"],
             context,
             tags=["dynamic_analysis", "syscall_trace", "runtime_behavior"],
         ))
@@ -286,7 +298,7 @@ def build_literature_nodes(graph: Mapping[str, Any], cert_bundle: Mapping[str, A
             "static_runtime_correlation_methodology_match",
             "Static artifact risk and runtime behavior both appear in this run, matching literature that combines static scanning with dynamic behavior to reduce blind spots.",
             sorted(set(_ids(unsafe_serialization[:25] + runtime_risky[:50]))),
-            ["zhao_2024_malhug", "nambiar_2026_dynahug", "safepickle_2026"],
+            ["andrewdzzz_2025_monitor", "zhao_2024_malhug", "nambiar_2026_dynahug", "safepickle_2026"],
             context,
             tags=["cross_layer_correlation", "static_dynamic_fusion"],
         ))
