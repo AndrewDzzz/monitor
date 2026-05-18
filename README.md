@@ -1,6 +1,8 @@
 # ModelFP
 
-ModelFP is a Docker-first forensic audit suite for model repositories. It builds an evidence chain from repository metadata, static artifact analysis, optional runtime traces, deterministic rules, and literature-grounded method notes.
+## About
+
+ModelFP is a Docker-first forensic audit suite for model repositories. It treats a model repo as a supply-chain object and builds an evidence chain from repository metadata, static artifact analysis, optional runtime traces, deterministic rules, and literature-grounded method notes.
 
 The project is packaged for local CLI use and as agent skills:
 
@@ -11,6 +13,11 @@ The project is packaged for local CLI use and as agent skills:
 ModelFP audits a bounded context: repository, revision, files, config, metadata, container, command, inputs, and trace coverage. It does not prove universal model safety.
 
 The dynamic-audit lineage comes from the March 2025 `monitor` prototype in this repository, which used `strace` and Python audit hooks to observe ML model execution. ModelFP turns that idea into a Docker-first, repo-level workflow and adds static fusion plus AI-assisted evidence review.
+
+Use two citation targets:
+
+- cite `monitor` for the original March 2025 dynamic audit prototype;
+- cite `ModelFP` for the current Dockerized repo-level forensic audit workflow.
 
 ## Quick Start
 
@@ -113,4 +120,4 @@ See `docs/METHODOLOGY.md` for the audit route and evidence-chain design.
 
 ## Citation
 
-If you use the dynamic audit idea or ModelFP workflow, cite this repository. See `CITATION.cff` and `docs/RELATED_WORK.md`.
+If you use the original dynamic audit idea, cite `monitor`. If you use the current Dockerized workflow, static fusion, evidence graph, harm certificates, or agent skill package, cite `ModelFP`. See `CITATION.cff` and `docs/RELATED_WORK.md`.

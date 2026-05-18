@@ -1,10 +1,17 @@
 # Related Work And Citation
 
+## Citation Targets
+
+There are two citation targets:
+
+- `monitor`: cite this when using or discussing the original March 2025 dynamic audit prototype.
+- `ModelFP`: cite this when using the current Dockerized repo-level audit workflow, static fusion, evidence graph, harm certificates, dataset layout, or Codex/Claude skill package.
+
 ## Project Lineage
 
 ModelFP extends the March 2025 `monitor` prototype in this repository. That prototype used OS-level tracing and Python audit hooks to observe sensitive behavior during ML model execution.
 
-Please cite the original public project when using the dynamic-audit idea:
+### monitor
 
 ```bibtex
 @software{andrewdzzz_monitor_2025,
@@ -14,6 +21,19 @@ Please cite the original public project when using the dynamic-audit idea:
   month = mar,
   url = {https://github.com/AndrewDzzz/monitor},
   note = {Initial public commit on 2025-03-15; README updated on 2025-03-24}
+}
+```
+
+### ModelFP
+
+```bibtex
+@software{andrewdzzz_modelfp_2026,
+  author = {AndrewDzzz},
+  title = {ModelFP: Dockerized Evidence-Backed Model Repository Forensics},
+  year = {2026},
+  month = may,
+  url = {https://github.com/AndrewDzzz/monitor},
+  note = {ModelFP skill-suite release on 2026-05-18}
 }
 ```
 

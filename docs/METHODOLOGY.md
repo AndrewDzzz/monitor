@@ -80,6 +80,8 @@ See `DOCKER_WORKFLOW.md` for the image and stage layout.
 
 ## Citation Position
 
-When describing ModelFP's dynamic audit idea, cite the March 2025 `monitor` prototype from this repository. DynaHug, "Malicious ML Model Detection by Learning Dynamic Behaviors" (arXiv:2604.19438, submitted 2026-04-21), is third-party work that uses a similar dynamic-behavior detection direction for malicious PTMs; cite it as comparison/context, not as a ModelFP or AndrewDzzz work. For broader supply-chain dynamic analysis, DySec (arXiv:2503.00324, submitted 2025-03-01) is relevant context.
+Use two citation targets. When describing the original dynamic audit idea, cite the March 2025 `monitor` prototype from this repository. When using the current Dockerized repo-level workflow, static fusion, evidence graph, harm certificates, dataset layout, or Codex/Claude skill package, cite `ModelFP`.
+
+DynaHug, "Malicious ML Model Detection by Learning Dynamic Behaviors" (arXiv:2604.19438, submitted 2026-04-21), is third-party work that uses a similar dynamic-behavior detection direction for malicious PTMs; cite it as comparison/context, not as a ModelFP or AndrewDzzz work. For broader supply-chain dynamic analysis, DySec (arXiv:2503.00324, submitted 2025-03-01) is relevant context.
 
 Do not claim that DynaHug used or cited `AndrewDzzz/monitor` unless a concrete citation, acknowledgement, repository dependency, or author statement is available.
