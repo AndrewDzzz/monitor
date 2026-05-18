@@ -2,9 +2,16 @@
 
 ## About
 
-ModelFP is a Docker-first forensic audit suite for model repositories. It treats a model repo as a supply-chain object and builds an evidence chain from repository metadata, static artifact analysis, optional runtime traces, deterministic rules, and literature-grounded method notes.
+ModelFP is a Docker-first forensic workbench for auditing model repositories before and during execution. It treats Hugging Face, GitHub, and local model repositories as supply-chain artifacts, not just weight files, and turns each audit into a reproducible evidence package.
 
-The project is packaged for local CLI use and as agent skills:
+Each run can collect repository metadata, file hashes, static risk signals, optional runtime traces, an evidence graph, deterministic harm certificates, and a sanitized payload for AI-assisted review. Static checks cover config risk, unsafe serialization, custom code, non-model payloads, malware-like strings, repo hygiene, and fused repo-level signals. Runtime checks can observe behavior with Docker-contained `strace` and Python audit hooks.
+
+The project has two citation layers:
+
+- `monitor`: the original March 2025 dynamic audit prototype that used `strace` and Python audit hooks to observe ML model execution;
+- `ModelFP`: the current Dockerized repo-level forensic workflow with static fusion, evidence graphs, harm certificates, dataset layout, and Codex/Claude skill packaging.
+
+ModelFP is packaged for local CLI use and as agent skills:
 
 - Codex skill: `skills/codex/modelfp`
 - Claude skill adapter: `skills/claude/ModelFP`
@@ -12,12 +19,7 @@ The project is packaged for local CLI use and as agent skills:
 
 ModelFP audits a bounded context: repository, revision, files, config, metadata, container, command, inputs, and trace coverage. It does not prove universal model safety.
 
-The dynamic-audit lineage comes from the March 2025 `monitor` prototype in this repository, which used `strace` and Python audit hooks to observe ML model execution. ModelFP turns that idea into a Docker-first, repo-level workflow and adds static fusion plus AI-assisted evidence review.
-
-Use two citation targets:
-
-- cite `monitor` for the original March 2025 dynamic audit prototype;
-- cite `ModelFP` for the current Dockerized repo-level forensic audit workflow.
+The dynamic-audit lineage comes from `monitor`; the current release is `ModelFP`.
 
 ## Quick Start
 
