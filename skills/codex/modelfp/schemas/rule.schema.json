@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ModelFP Candidate Rule",
+  "type": "object",
+  "required": ["id", "type", "verdict", "severity", "description"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+    "type": {
+      "type": "string",
+      "enum": ["static", "config", "environment", "runtime", "temporal_dataflow", "cross_layer_correlation"]
+    },
+    "description": {"type": "string"},
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "pre_execution_risk",
+        "exposure_risk",
+        "attempted_harm",
+        "observed_runtime_violation",
+        "realized_harm",
+        "inconclusive"
+      ]
+    },
+    "severity": {"type": "string", "enum": ["low", "medium", "high", "critical"]},
+    "harm_type": {"type": "string"},
+    "harm_subtype": {"type": "string"},
+    "conditions": {"type": "object"},
+    "sequence": {"type": "array", "items": {"type": "object"}},
+    "constraints": {"type": "object"},
+    "generated_by": {"type": "string"},
+    "generated_from": {"type": "array", "items": {"type": "string"}},
+    "status": {"type": "string", "enum": ["candidate", "validated", "shadow", "active", "retired"]}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ModelFP Harm Certificate",
+  "type": "object",
+  "required": ["certificate_id", "rule_id", "verdict", "severity", "witness", "evidence"],
+  "properties": {
+    "certificate_id": {"type": "string"},
+    "model": {"type": "string"},
+    "revision": {"type": "string"},
+    "run_id": {"type": "string"},
+    "rule_id": {"type": "string"},
+    "verdict": {"type": "string"},
+    "severity": {"type": "string", "enum": ["low", "medium", "high", "critical"]},
+    "harm_type": {"type": "string"},
+    "harm_subtype": {"type": "string"},
+    "witness": {"type": "object", "additionalProperties": {"type": "string"}},
+    "evidence": {"type": "array", "items": {"type": "string"}},
+    "checker_status": {"type": "string", "enum": ["verified", "unverified", "rejected"]}
+  },
+  "additionalProperties": false
+}

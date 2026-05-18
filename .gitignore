@@ -1,0 +1,34 @@
+# Local audit outputs and downloaded model snapshots
+audit_datasets/
+latest_hf_runs/
+outputs/
+outputs_*/
+figures/
+workspace/models/
+workspace/out/
+
+# Python and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and secrets
+.env
+.env.*
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Archives and generated packages
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/

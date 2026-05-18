@@ -1,0 +1,79 @@
+{
+  "model": "owner/model-name",
+  "revision": "abc123def456",
+  "run_id": "run-2026-05-17-001",
+  "overall_verdict": "realized_harm",
+  "risk_scores": {
+    "repo": "medium",
+    "config": "high",
+    "artifact": "critical",
+    "environment": "critical",
+    "runtime": "critical"
+  },
+  "evidence_summary": {
+    "static_artifact": {
+      "scanner": "modelscan",
+      "verdict": "critical",
+      "evidence": ["S001"]
+    },
+    "config": {
+      "verdict": "high",
+      "evidence": ["C001"]
+    },
+    "environment": {
+      "verdict": "critical",
+      "evidence": ["ENV001"]
+    },
+    "runtime": {
+      "verdict": "critical",
+      "evidence": ["E102", "E108", "E140", "E147"]
+    }
+  },
+  "harm_certificates": [
+    {
+      "certificate_id": "ModelFP-HC-0001",
+      "rule_id": "secret_access_followed_by_external_write",
+      "verdict": "realized_harm",
+      "severity": "critical",
+      "evidence": ["E102", "E108", "E140", "E147"],
+      "verified": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "F001",
+      "category": "static_artifact_risk",
+      "source": "modelscan",
+      "severity": "critical",
+      "title": "Unsafe serialization signature detected",
+      "evidence": ["S001"],
+      "meaning": "The model artifact may execute unsafe code during loading."
+    },
+    {
+      "id": "F002",
+      "category": "runtime_behavior",
+      "source": "strace+audit",
+      "severity": "critical",
+      "title": "Secret file read followed by external socket write",
+      "evidence": ["E102", "E108", "E140", "E147"],
+      "meaning": "The trace supports a possible credential exfiltration harm chain."
+    }
+  ],
+  "gpt_summary": {
+    "summary": "The model execution shows a trace-backed confidentiality harm chain. The process opened and read a secret path, then established an external connection and wrote to that socket. This is consistent with possible credential exfiltration.",
+    "risk_scenario": "possible credential exfiltration",
+    "evidence_events": ["E102", "E108", "E140", "E147"],
+    "recommended_action": "terminate_and_quarantine"
+  },
+  "candidate_rules": [
+    {
+      "name": "cloud_credential_read_followed_by_external_write",
+      "status": "candidate",
+      "generated_from": ["ModelFP-HC-0001"]
+    }
+  ],
+  "limitations": [
+    "This report is bounded to the observed run and collector coverage.",
+    "No claim is made that the model is safe or unsafe under all possible inputs."
+  ]
+}

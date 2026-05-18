@@ -1,0 +1,7 @@
+interface:
+  display_name: "ModelFP"
+  short_description: "Audit model repos in Docker with evidence"
+  default_prompt: "Use $modelfp to audit this Hugging Face model repository in Docker and summarize evidence-backed risks."
+
+policy:
+  allow_implicit_invocation: true

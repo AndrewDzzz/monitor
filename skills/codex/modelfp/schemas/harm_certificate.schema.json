@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ModelFP Harm Certificate",
+  "type": "object",
+  "required": [
+    "certificate_id",
+    "model",
+    "revision",
+    "run_id",
+    "rule_id",
+    "verdict",
+    "severity",
+    "witness",
+    "evidence"
+  ],
+  "properties": {
+    "certificate_id": {
+      "type": "string",
+      "pattern": "^ModelFP-HC-[0-9A-Za-z_-]+$"
+    },
+    "model": {"type": "string"},
+    "revision": {"type": "string"},
+    "run_id": {"type": "string"},
+    "rule_id": {"type": "string"},
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "pre_execution_risk",
+        "exposure_risk",
+        "attempted_harm",
+        "observed_runtime_violation",
+        "realized_harm",
+        "suspicious",
+        "no_observed_harm",
+        "inconclusive"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["info", "low", "medium", "high", "critical"]
+    },
+    "witness": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "evidence": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "checker_version": {
+      "type": "string"
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": true
+}

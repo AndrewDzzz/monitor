@@ -1,0 +1,189 @@
+policy_id: modelfp_default_hf_policy_v0
+version: 0.1.0
+scope:
+  platform: huggingface
+  max_params: 1B
+  max_repo_size_gb: 1
+  default_network: disabled_or_logged
+  trust_remote_code: discouraged
+
+verdicts:
+  - pre_execution_risk
+  - exposure_risk
+  - attempted_harm
+  - observed_runtime_violation
+  - realized_harm
+  - suspicious
+  - no_observed_harm
+  - inconclusive
+
+path_classes:
+  secret:
+    - /home/*/.ssh/**
+    - /root/.ssh/**
+    - /home/*/.aws/credentials
+    - /home/*/.config/gcloud/**
+    - /home/*/.kube/config
+  shell:
+    - /bin/sh
+    - /bin/bash
+    - /usr/bin/sh
+    - /usr/bin/bash
+  docker_socket:
+    - /var/run/docker.sock
+  tmp_executable:
+    - /tmp/**/*.py
+    - /tmp/**/*.sh
+    - /tmp/**/*.so
+    - /tmp/**/*.elf
+
+rules:
+  - name: config_auto_map_requires_custom_code_review
+    type: config_finding
+    description: Flag config that routes loading through custom Python code.
+    verdict: pre_execution_risk
+    severity: high
+    conditions:
+      - id: c
+        evidence_type: config_finding
+        finding: auto_map_present
+        min_severity: high
+    constraints:
+      same_run: [c]
+      requires_coverage: [config]
+    metadata:
+      status: active
+
+  - name: modelscan_critical_static_artifact_risk
+    type: static_finding
+    description: ModelScan critical artifact finding indicates potential serialization attack risk.
+    verdict: pre_execution_risk
+    severity: critical
+    conditions:
+      - id: s
+        evidence_type: static_artifact_finding
+        source: modelscan
+        min_severity: critical
+    constraints:
+      same_run: [s]
+      requires_coverage: [modelscan]
+    metadata:
+      status: active
+
+  - name: environment_secret_exposure
+    type: environment_finding
+    description: Sensitive secrets are exposed to the model runtime environment.
+    verdict: exposure_risk
+    severity: critical
+    conditions:
+      - id: env
+        evidence_type: environment_finding
+        finding: secret_exposed
+        min_severity: critical
+    constraints:
+      same_run: [env]
+      requires_coverage: [environment]
+    metadata:
+      status: active
+
+  - name: runtime_shell_execution
+    type: single_event
+    description: Shell execution during model load or inference is a runtime violation.
+    verdict: observed_runtime_violation
+    severity: critical
+    conditions:
+      - id: e
+        evidence_type: runtime_event
+        op: execve
+        path_class: shell
+        result: success
+    constraints:
+      same_run: [e]
+      requires_coverage: [process]
+    metadata:
+      status: active
+
+  - name: docker_socket_access
+    type: single_event
+    description: Access to Docker daemon socket may enable host/container escape.
+    verdict: observed_runtime_violation
+    severity: critical
+    conditions:
+      - id: e
+        evidence_type: runtime_event
+        op: open
+        path_class: docker_socket
+        result: success
+    constraints:
+      same_run: [e]
+      requires_coverage: [file]
+    metadata:
+      status: active
+
+  - name: secret_access_followed_by_external_write
+    type: temporal_dataflow
+    description: Secret file read followed by external socket write indicates possible exfiltration.
+    verdict: realized_harm
+    severity: critical
+    conditions:
+      - id: a
+        evidence_type: runtime_event
+        op: open
+        path_class: secret
+        result: success
+      - id: b
+        evidence_type: runtime_event
+        op: read
+        fd_from: a
+        result: success
+        after: a
+      - id: c
+        evidence_type: runtime_event
+        op: connect
+        dst_type: external
+        result: success
+        after: b
+      - id: d
+        evidence_type: runtime_event
+        op: write
+        fd_from: c
+        result: success
+        after: c
+    constraints:
+      same_process: [a, b, c, d]
+      same_run: [a, b, c, d]
+      within_seconds: 30
+      requires_coverage: [file, network, process]
+    metadata:
+      status: active
+
+  - name: modelscan_critical_plus_loadtime_shell_network
+    type: cross_layer_correlation
+    description: Static serialization risk correlated with load-time shell execution and network access.
+    verdict: observed_runtime_violation
+    severity: critical
+    conditions:
+      - id: s
+        evidence_type: static_artifact_finding
+        source: modelscan
+        min_severity: critical
+      - id: e1
+        evidence_type: runtime_event
+        phase: LOAD
+        op: execve
+        path_class: shell
+        result: success
+      - id: e2
+        evidence_type: runtime_event
+        phase: LOAD
+        op: connect
+        dst_type: external
+        result: success
+        after: e1
+    constraints:
+      same_process: [e1, e2]
+      same_run: [s, e1, e2]
+      within_seconds: 10
+      requires_coverage: [modelscan, process, network]
+    metadata:
+      status: active

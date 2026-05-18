@@ -1,0 +1,229 @@
+policy_id: modelfp_minimal_policy_v0
+version: 0.2
+scope:
+  target: huggingface_model_repository
+  max_parameters: 1B
+  note: "Small models are still treated as untrusted. The limit is for cost and blast-radius control, not a safety assumption."
+
+verdicts:
+  - pre_execution_risk
+  - exposure_risk
+  - attempted_harm
+  - observed_runtime_violation
+  - realized_harm
+  - no_observed_harm
+  - inconclusive
+
+path_classes:
+  secret:
+    - "/home/*/.ssh/**"
+    - "/root/.ssh/**"
+    - "/home/*/.aws/credentials"
+    - "/home/*/.config/gcloud/**"
+    - "/home/*/.kube/config"
+  system_sensitive:
+    - "/etc/passwd"
+    - "/etc/shadow"
+    - "/etc/sudoers"
+  docker_socket:
+    - "/var/run/docker.sock"
+  shell:
+    - "/bin/sh"
+    - "/bin/bash"
+    - "/usr/bin/sh"
+    - "/usr/bin/bash"
+
+environment_rules:
+  - id: ENV_DOCKER_SOCKET_VISIBLE
+    if:
+      evidence_type: environment
+      finding: docker_socket_available
+    verdict: exposure_risk
+    severity: critical
+
+  - id: ENV_SECRET_LIKE_VARIABLE_EXPOSED
+    if:
+      evidence_type: environment
+      finding: secret_like_environment_variable_exposed
+    verdict: exposure_risk
+    severity: high
+
+  - id: ENV_SENSITIVE_DIRECTORY_VISIBLE
+    if:
+      evidence_type: environment
+      finding_any:
+        - ssh_directory_visible
+        - root_ssh_directory_visible
+        - aws_directory_visible
+        - gcloud_directory_visible
+    verdict: exposure_risk
+    severity: critical
+
+static_rules:
+  - id: STATIC_PICKLE_DANGEROUS_GLOBAL_REF
+    if:
+      evidence_type: static_artifact
+      source: pickle_static_probe
+      finding: pickle_dangerous_global_ref
+    verdict: pre_execution_risk
+    severity: high
+
+  - id: STATIC_MODELSCAN_CRITICAL
+    if:
+      evidence_type: static_artifact
+      source: modelscan
+      min_severity: critical
+    verdict: pre_execution_risk
+    severity: critical
+
+  - id: STATIC_PYTHON_AST_HIGH_RISK_CALL
+    if:
+      evidence_type: static_code
+      source: python_ast_probe
+      finding_any:
+        - dangerous_python_call
+        - subprocess_shell_true
+      min_severity: high
+    verdict: pre_execution_risk
+    severity: high
+
+  - id: STATIC_ALL_FILES_NON_MODEL_PAYLOAD
+    if:
+      evidence_type: repository
+      source: all_files_static_probe
+      finding: non_model_payload_extension
+    verdict: pre_execution_risk
+    severity: high
+
+  - id: STATIC_MALWARE_TRIAGE_HIGH
+    if:
+      evidence_type: malware_static
+      source: malware_static_probe
+      min_severity: high
+    verdict: pre_execution_risk
+    severity: high
+
+  - id: STATIC_FUSION_HIGH_TARGET_RISK
+    if:
+      evidence_type: static_fusion
+      source: static_fusion_probe
+      finding_any:
+        - malware_static_plus_network_config
+        - non_model_payload_repo_level_concern
+      min_severity: high
+    verdict: pre_execution_risk
+    severity: high
+
+  - id: STATIC_FUSION_CRITICAL_TARGET_RISK
+    if:
+      evidence_type: static_fusion
+      source: static_fusion_probe
+      finding_any:
+        - malware_static_plus_custom_code_config
+        - unsafe_serialization_correlated
+        - malware_static_plus_python_execution_sink
+      min_severity: critical
+    verdict: pre_execution_risk
+    severity: critical
+
+config_rules:
+  - id: CONFIG_AUTO_MAP_PRESENT
+    if:
+      evidence_type: config
+      finding: auto_map_present
+    verdict: pre_execution_risk
+    severity: high
+
+  - id: CONFIG_TRUST_REMOTE_CODE_REFERENCE
+    if:
+      evidence_type: config
+      finding: trust_remote_code_reference
+    verdict: pre_execution_risk
+    severity: high
+
+runtime_rules:
+  - id: RUNTIME_SHELL_EXECUTION
+    if:
+      evidence_type: runtime_event
+      op: execve
+      path_class: shell
+      result: success
+    verdict: observed_runtime_violation
+    severity: critical
+
+  - id: RUNTIME_SECRET_OPEN
+    if:
+      evidence_type: runtime_event
+      op: open
+      path_class: secret
+      result: success
+    verdict: observed_runtime_violation
+    severity: critical
+
+  - id: RUNTIME_DOCKER_SOCKET_ACCESS
+    if:
+      evidence_type: runtime_event
+      op: open
+      path_class: docker_socket
+      result: success
+    verdict: observed_runtime_violation
+    severity: critical
+
+  - id: RUNTIME_EXTERNAL_NETWORK_CONNECT
+    if:
+      evidence_type: runtime_event
+      op: connect
+      dst_type: external
+      result: success
+    verdict: observed_runtime_violation
+    severity: high
+
+temporal_rules:
+  - id: SECRET_ACCESS_FOLLOWED_BY_EXTERNAL_WRITE
+    type: temporal_dataflow
+    verdict: realized_harm
+    severity: critical
+    harm_type: confidentiality
+    harm_subtype: possible_secret_exfiltration
+    sequence:
+      - var: a
+        op: open
+        path_class: secret
+        result: success
+      - var: b
+        op: read
+        fd_from: a
+        result: success
+        after: a
+      - var: c
+        op: connect
+        dst_type: external
+        result: success
+        after: b
+      - var: d
+        op: write
+        fd_from: c
+        result: success
+        after: c
+    constraints:
+      same_process: [a, b, c, d]
+      within_seconds: 30
+
+cross_layer_rules:
+  - id: MODELSCAN_CRITICAL_PLUS_RUNTIME_SHELL
+    type: cross_layer_correlation
+    verdict: observed_runtime_violation
+    severity: critical
+    conditions:
+      static:
+        source: modelscan
+        min_severity: critical
+      runtime:
+        evidence_type: runtime_event
+        phase: LOAD
+        op: execve
+        path_class: shell
+        result: success
+    constraints:
+      same_model_revision: true
+      same_run_context: true

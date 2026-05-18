@@ -1,0 +1,11 @@
+.git
+__pycache__
+*.pyc
+outputs/*
+*.zip
+sandbox/
+workspace/models/
+workspace/out/
+audit_datasets/
+latest_hf_runs/
+figures/

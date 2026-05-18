@@ -1,0 +1,22 @@
+services:
+  modelfp:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        INSTALL_ML_DEPS: "true"
+    image: modelfp:ml
+    command:
+      - --model-repo
+      - /workspace/models/model
+      - --target-script
+      - /workspace/target/run_hf_local_model.py
+      - --out
+      - /workspace/out
+      - --timeout
+      - "300"
+      - --
+      - --model-dir
+      - /workspace/models/model
+      - --prompt
+      - hello

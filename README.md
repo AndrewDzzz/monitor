@@ -1,131 +1,101 @@
-# monitor
-A lightweight monitoring tool that leverages OS-level strace alongside Python audit hooks to detect sensitive operations during ML model execution.
+# ModelFP
 
-## Features
+ModelFP is a Docker-first forensic audit suite for model repositories. It builds an evidence chain from repository metadata, static artifact analysis, optional runtime traces, deterministic rules, and literature-grounded method notes.
 
-- **Sensitive File Access Detection:**  
-  Monitors access to critical system configuration files and user credential files.
+The project is packaged for local CLI use and as agent skills:
 
-- **Network Monitoring:**  
-  Flags any network-related system calls as high risk.
+- Codex skill: `skills/codex/modelfp`
+- Claude skill adapter: `skills/claude/ModelFP`
+- Local wrappers: `scripts/`
 
-- **Dynamic Code Execution Detection:**  
-  Detects dangerous internal operations such as exec, eval, pickle.load, and more.
+ModelFP audits a bounded context: repository, revision, files, config, metadata, container, command, inputs, and trace coverage. It does not prove universal model safety.
 
-- **Realtime & One‑time Monitoring:**  
-  Run the tool continuously (realtime) or just once to analyze a script’s execution.
+## Quick Start
 
-- **Immediate Termination Option:**  
-  Automatically terminates the monitored process when high‑risk behavior is detected (configurable via a command‑line flag).
-
-- **Python Internal Audit Hook (Optional):**  
-  When enabled, registers an audit hook to catch sensitive Python operations at the interpreter level.
-
-## Directory Structure
-
-- **monitor/__init__.py:** Marks the directory as a Python package.
-- **monitor/rules.py:** Contains risk rules and constants.
-- **monitor/audit.py:** Implements the internal audit hook for Python-level monitoring.
-- **monitor/utils.py:** Provides utility functions for running strace, parsing logs, and detecting risk events.
-- **monitor/main.py:** The main entry point for the tool.
-- **README.md:** This file.
-
-## Requirements
-
-- **Operating System:** Linux (the tool uses `strace`)
-- **Python Version:** 3.8 or later
-- **Dependencies:**  
-  - `strace` must be installed on your system.
-
-## Installation
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/your-ml-runtime-monitoring-tool.git
-    cd your-ml-runtime-monitoring-tool
-    ```
-
-2. (Optional) Create and activate a virtual environment:
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-
-## Usage
-
-### One-time Monitoring
-
-Run your ML script once and then parse the log:
-```bash
-python -m monitor.main --script /path/to/your_ml_script.py --logfile /path/to/trace.log --mode once
-```
-
-### Realtime Monitoring
-
-Continuously monitor your ML script:
-```bash
-python -m monitor.main --script /path/to/your_ml_script.py --logfile /path/to/trace.log --mode realtime
-```
-
-### Immediate Termination on High Risk
-
-To immediately terminate monitoring upon detecting a high‑risk event:
-```bash
-python -m monitor.main --script /path/to/your_ml_script.py --logfile /path/to/trace.log --terminate-on-high-risk
-```
-
-### Enable Python Internal Audit Hook
-
-To monitor internal Python operations (e.g., dynamic code execution) with the audit hook:
-```bash
-python -m monitor.main --script /path/to/your_ml_script.py --logfile /path/to/trace.log --audit
-```
-
-## Example
-
-When running the model mkiani/gpt2-eval in hugging face which contains the code snippet:
+Build the Docker images:
 
 ```bash
-__import__("os").system("ls")
+./scripts/build_images.sh
 ```
 
-/path/to/your_ml_script.py often contains the code for u to run the model:
+Audit a Hugging Face repo in static-only mode. The fingerprint and evidence stay under `audit_datasets/`; the downloaded model snapshot is deleted after the run by default.
 
 ```bash
-import torch
-torch.load("/path/your_ml_path")
+./scripts/audit_hf_static.sh Helsinki-NLP/opus-mt-es-yua ./audit_datasets main
 ```
 
-—the tool produces the following output:
+Audit a GitHub repo as a repo-level dataset:
+
 ```bash
-Python audit hook registered.
-Monitoring: example.py, log file: trace.log
-[AUDIT CRITICAL] Subprocess execution detected => Event: subprocess.Popen, Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/path/trace.log', 'python', '/path/example.py'], None, None)
-[AUDIT CRITICAL] Unsafe global usage detected: Module 'subprocess' in event 'subprocess.Popen', Args: ('strace', ['strace', '-ff', '-e', 'trace:file,process,network', '-s', '1024', '-o', '/path/trace.log', 'python', '/path/example.py'], None, None)
-strace: invalid system call 'trace:file'
-[AUDIT CRITICAL] Unsafe global usage detected: Module 'os' in event 'os.scandir', Args: ('/path',)
-
-=== 🚨 High Risk ===
-⚠️ Creating executable file in temporary directory: openat(AT_FDCWD, "/tmp/tmpur81jizd/_remote_module_non_scriptable.py", O_WRONLY|O_CREAT|O_TRUNC|O_CLOEXEC, 0666) = 5
-❌ os.system() call detected: execve("/bin/sh", ["sh", "-c", "ls"], 0x5bcb9e830600 /* 98 vars */) = 0
-
-=== ⚠️ Medium Risk ===
-None
-
-=== ℹ️ Low Risk ===
-None
+./scripts/audit_github_static.sh https://github.com/AndrewDzzz/malicious_model_test ./audit_datasets main
 ```
 
-## Disclaimer
+Run static analysis on a local model snapshot or repo:
 
-This tool is a basic, rule-based monitoring solution for ML runtimes and is intended for demonstration and educational purposes only. It should not replace a comprehensive security audit or intrusion detection system. Please customize the risk rules as needed for your environment and adhere to best security practices.
+```bash
+./scripts/audit_local_static.sh /path/to/local/repo ./outputs_static
+```
 
-**[IMPORTANT]** This project is fully contructed by gpt so I need time to verify all of the function. If you are interested in it, I will be happy to hear feedback from u!!!
+Run controlled pickle detonation for `.pickle` and `.pkl` artifacts:
 
-**[IMPORTANT]** It is still under contrustion！！！I will try to connect the log with gpt to give more detailed answer！！！
+```bash
+./scripts/audit_pickle_runtime.sh /path/to/local/repo ./outputs_pickle_runtime
+```
 
-**[IMPORTANT]** Remember to run the code in sandbox！！！
+## Install As Skills
 
+Install or update the Codex skill:
 
+```bash
+./scripts/install_codex_skill.sh
+```
 
+Install a self-contained Claude skill folder into a chosen destination:
 
+```bash
+./scripts/install_claude_skill.sh /path/to/claude/skills
+```
+
+The Codex frontmatter name remains `modelfp` because Codex skill names are lowercase identifiers. The public project, UI display name, and Claude skill are named `ModelFP`.
+
+## What It Checks
+
+Static modules run inside Docker and include:
+
+- file inventory, SHA256, file type, risky extensions, archives, command and URL text patterns;
+- repository hygiene: non-model payloads, repeated commits, README script or external app instructions, task mismatch, malware-hosting-like file trees;
+- malware-style static triage: executable magic, download cradles, PowerShell stagers, reverse-shell snippets, persistence hooks, credential harvesting strings, miner strings, and obfuscation patterns;
+- Python and Lambda AST checks for dangerous calls, `subprocess(shell=True)`, unsafe deserialization, event logging, Flask debug mode, and private package indexes;
+- config checks for `auto_map`, `trust_remote_code`, URLs, missing `model_type`, and custom-code loading;
+- HDF5/Keras probing, pickle opcode probing, ModelScan integration, and fused static repo-level judgment.
+
+Dynamic modules are optional and also run inside Docker:
+
+- `strace` syscall capture;
+- Python audit hook capture;
+- per-artifact pickle runtime detonation with network disabled;
+- normalized evidence graph and deterministic harm certificates.
+
+## Output Contract
+
+Dataset runs write one folder per audit:
+
+```text
+audit_datasets/<repo_slug>/<audit_id>/
+dataset_manifest.json
+orchestrator.log
+metadata/
+outputs_static/
+outputs_runtime/          optional
+outputs_pickle_runtime/   optional
+```
+
+Primary facts are `evidence_graph.json` and verified `harm_certificates.json`. LLM payloads are secondary interpretation and must cite evidence IDs.
+
+## Data Hygiene
+
+The published repository excludes local audit outputs, model snapshots, sandbox canaries, logs, archives, and generated figures. Runtime wrappers keep outputs on the host but remove downloaded or cloned model snapshots by default. See `docs/SANITIZATION.md`.
+
+## Method
+
+See `docs/METHODOLOGY.md` for the audit route and evidence-chain design.

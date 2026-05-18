@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ModelFP Evidence Node",
+  "type": "object",
+  "required": ["id", "evidence_type", "source", "severity"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^(S|C|R|ENV|E|H|G)[0-9A-Za-z_-]+$"},
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "repo_finding",
+        "config_risk",
+        "static_artifact_risk",
+        "environment_finding",
+        "runtime_event",
+        "harm_chain",
+        "gpt_summary",
+        "candidate_rule"
+      ]
+    },
+    "source": {"type": "string"},
+    "severity": {"type": "string", "enum": ["info", "low", "medium", "high", "critical"]},
+    "model": {"type": "string"},
+    "revision": {"type": "string"},
+    "run_id": {"type": "string"},
+    "file": {"type": "string"},
+    "finding": {"type": "string"},
+    "meaning": {"type": "string"},
+    "phase": {"type": "string", "enum": ["PRECHECK", "INSTALL", "LOAD", "INFERENCE", "CLEANUP", "UNKNOWN"]},
+    "time": {"type": "number"},
+    "pid": {"type": "integer"},
+    "ppid": {"type": "integer"},
+    "op": {"type": "string"},
+    "path": {"type": "string"},
+    "path_class": {"type": "string"},
+    "mode": {"type": "string"},
+    "fd": {"type": "integer"},
+    "dst_type": {"type": "string"},
+    "port": {"type": "integer"},
+    "result": {"type": "string", "enum": ["success", "failure", "unknown"]},
+    "raw_ref": {"type": "string"},
+    "labels": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
