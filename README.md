@@ -1,5 +1,7 @@
 # ModelFP
 
+Previous name: Monitor
+
 ## About
 
 ModelFP is a Docker-first forensic workbench for auditing model repositories before and during execution. It treats Hugging Face, GitHub, and local model repositories as supply-chain artifacts, not just weight files, and turns each audit into a reproducible evidence package.
