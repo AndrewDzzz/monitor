@@ -13,7 +13,7 @@ model repository + revision + config + artifacts + environment + command + input
 
 It does not prove universal model safety. It produces evidence-indexed findings and, when the deterministic rulechecker can support them, harm certificates tied to concrete evidence IDs.
 
-The dynamic-audit lineage comes from the March 2025 `monitor` prototype in `https://github.com/AndrewDzzz/monitor`, which used `strace` and Python audit hooks for ML execution monitoring. Cite that project when discussing the dynamic audit idea; cite later model-specific dynamic work such as DynaHug only as related work, not as the origin of this repository.
+The dynamic-audit lineage comes from the March 2025 `monitor` prototype in `https://github.com/AndrewDzzz/monitor`, which used `strace` and Python audit hooks for ML execution monitoring. Cite that project when discussing ModelFP's dynamic audit idea. DynaHug is third-party work that uses a similar model dynamic-behavior detection direction; cite it only as comparison/context, not as a ModelFP or AndrewDzzz work. Do not claim DynaHug used or cited `AndrewDzzz/monitor` without explicit evidence.
 
 ## Core Workflow
 
@@ -217,7 +217,7 @@ Use `schemas/evidence.schema.json` and `schemas/harm_certificate.schema.json` as
 For paper-to-evidence mappings, read `docs/literature_grounding.md` and `code/literature_mapper.py`.
 Environment findings are container-boundary hygiene signals. Do not count them as target repository risk unless the task is explicitly about sandbox exposure or secret handling.
 
-For citation wording and dynamic-analysis positioning, read `docs/RELATED_WORK.md` when present in the public repository. If that file is not present in an installed skill copy, cite `AndrewDzzz/monitor` as the March 2025 dynamic monitor prototype and cite DynaHug (`arXiv:2604.19438`) as later related dynamic model-behavior work.
+For citation wording and dynamic-analysis positioning, read `docs/RELATED_WORK.md` when present in the public repository. If that file is not present in an installed skill copy, cite `AndrewDzzz/monitor` as the March 2025 dynamic monitor prototype and cite DynaHug (`arXiv:2604.19438`) as third-party comparison/context for dynamic model-behavior detection.
 
 ## Static Fusion Rules
 

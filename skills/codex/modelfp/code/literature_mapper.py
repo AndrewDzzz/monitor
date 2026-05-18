@@ -50,7 +50,7 @@ BIBLIOGRAPHY: Dict[str, Dict[str, Any]] = {
         "title": "Malicious ML Model Detection by Learning Dynamic Behaviors",
         "year": 2026,
         "url": "https://arxiv.org/abs/2604.19438",
-        "method": "Dynamic behavior analysis of pretrained models to complement static/rule-based detectors.",
+        "method": "Third-party dynamic behavior analysis of pretrained models; use as comparison/context, not as a ModelFP or AndrewDzzz work.",
     },
     "safepickle_2026": {
         "title": "SafePickle: Robust and Generic ML Detection of Malicious Pickle-based ML Models",
@@ -265,7 +265,7 @@ def build_literature_nodes(graph: Mapping[str, Any], cert_bundle: Mapping[str, A
         out.append(_node(
             idx,
             "dynamic_behavior_methodology_match",
-            "Runtime evidence follows the repository's March 2025 dynamic-monitoring idea and later dynamic-analysis work used to catch behaviors that static scanners can miss.",
+            "Runtime evidence follows this repository's March 2025 dynamic-monitoring lineage and is comparable to third-party dynamic-analysis work that catches behaviors static scanners can miss.",
             _ids(runtime_risky[:50]),
             ["andrewdzzz_2025_monitor", "nambiar_2026_dynahug", "mehedi_2025_dysec", "zhao_2024_malhug"],
             context,
@@ -296,7 +296,7 @@ def build_literature_nodes(graph: Mapping[str, Any], cert_bundle: Mapping[str, A
         out.append(_node(
             idx,
             "static_runtime_correlation_methodology_match",
-            "Static artifact risk and runtime behavior both appear in this run, matching literature that combines static scanning with dynamic behavior to reduce blind spots.",
+            "Static artifact risk and runtime behavior both appear in this run, matching the ModelFP/monitor lineage and third-party literature that combine static scanning with dynamic behavior to reduce blind spots.",
             sorted(set(_ids(unsafe_serialization[:25] + runtime_risky[:50]))),
             ["andrewdzzz_2025_monitor", "zhao_2024_malhug", "nambiar_2026_dynahug", "safepickle_2026"],
             context,

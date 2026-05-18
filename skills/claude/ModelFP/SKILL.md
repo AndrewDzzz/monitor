@@ -9,6 +9,8 @@ Use this skill when asked to review or audit a model repository, inspect suspici
 
 ModelFP's dynamic-audit lineage comes from the March 2025 `monitor` prototype at `https://github.com/AndrewDzzz/monitor`, which used `strace` and Python audit hooks for ML execution monitoring. Cite that repository when discussing the dynamic audit idea.
 
+DynaHug is third-party work that uses a similar dynamic model-behavior detection direction. Cite it only as comparison/context, not as a ModelFP or AndrewDzzz work, and do not claim it used `AndrewDzzz/monitor` without explicit evidence.
+
 ## Operating Rules
 
 - Treat ModelFP as repo-level forensic auditing, not only model-file scanning.

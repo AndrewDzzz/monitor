@@ -29,8 +29,10 @@ Dynamic analysis is valuable because static model scanners can miss behavior tha
 
 Related dynamic-analysis work includes:
 
-- Nambiar, Pradhan, and Soremekun, "Malicious ML Model Detection by Learning Dynamic Behaviors", arXiv:2604.19438, submitted 2026-04-21. DynaHug learns benign PTM runtime behavior and compares dynamic model behavior against static, dynamic, and LLM-based baselines.
+- Nambiar, Pradhan, and Soremekun, "Malicious ML Model Detection by Learning Dynamic Behaviors", arXiv:2604.19438, submitted 2026-04-21. DynaHug is third-party work, not a ModelFP/AndrewDzzz work. It uses a similar dynamic-behavior detection direction for malicious PTMs and is useful comparison/context.
 - Mehedi, Islam, Ramachandran, and Jurdak, "DySec: A Machine Learning-based Dynamic Analysis for Detecting Malicious Packages in PyPI Ecosystem", arXiv:2503.00324, submitted 2025-03-01. DySec shows the broader supply-chain value of controlled runtime behavior monitoring with kernel/user-level probes.
+
+Attribution guardrail: cite `AndrewDzzz/monitor` as the March 2025 origin of this repository's dynamic-audit workflow. Do not state that DynaHug used or cited `AndrewDzzz/monitor` unless there is explicit evidence such as a paper citation, repository dependency, acknowledgement, or author statement.
 
 ## AI-Assisted Audit Position
 
